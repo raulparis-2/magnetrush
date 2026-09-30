@@ -122,7 +122,7 @@ button:disabled{opacity:.6}
 #seo-content h2{margin:0 0 12px;color:#fff;font-size:25px;line-height:1.2}
 #seo-content h3{margin:22px 0 6px;color:#fde68a;font-size:18px}
 #seo-content p{margin:0 0 8px}
-</style>
+#victory{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle,#1b144dcc,#05060ff2 70%);backdrop-filter:blur(5px);overflow:hidden}#victory.hide{display:none}#victory h2{margin:0;color:#fde047;font-size:clamp(42px,12vw,70px);font-weight:1000;letter-spacing:3px;text-shadow:0 0 12px #facc15,0 0 35px #f59e0b;animation:winPulse .8s ease-in-out infinite alternate}#victory p{font-size:20px;font-weight:800;margin:10px 0 22px;color:#fff}#victory .trophy{font-size:70px;animation:winBounce 1s ease-in-out infinite}.confetti{position:absolute;top:-20px;width:9px;height:18px;border-radius:2px;animation:confettiFall 2.8s linear infinite}@keyframes winPulse{to{transform:scale(1.06)}}@keyframes winBounce{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-12px) rotate(5deg)}}@keyframes confettiFall{to{transform:translate3d(var(--dx),110vh,0) rotate(720deg)}}</style>
 </head>
 <body>
 <div id="wrap">
@@ -130,7 +130,7 @@ button:disabled{opacity:.6}
     <canvas id="cv"></canvas>
     <div id="hud" class="hide">0</div>
     <div id="sub" class="hide"></div><div id="legend" class="hide"><span class="good" id="legendGood"></span><span class="bad" id="legendBad"></span></div>
-    <div id="ov">
+    <div id="victory" class="hide"><div class="trophy">🏆</div><h2>¡FELICIDADES!</h2><p>¡Has completado el nivel final de Magnet Rush!</p><button id="victoryHome" class="sec">⌂ Volver al inicio</button></div><div id="ov">
       <h1 id="t">MAGNET RUSH</h1>
       <div id="rc">🏆 RÉCORD <b id="rv">0</b></div>
       <p id="s"><span style="color:#fde047">● Coge los objetos dorados</span>.<br><span style="color:#ff6b81">✕ Evita las minas rojas</span>.<br>Mantén pulsado para <b>ATRAER</b> y suelta para <b>REPELER</b>.</p>
@@ -256,7 +256,7 @@ function spawn(type){
 }
 function burst(x,y,col){for(let i=0;i<7;i++){const a=Math.random()*6.28,s=1+Math.random()*2.8;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c:col})}}
 function play(){$('hud').classList.remove('hide');$('sub').classList.remove('hide');$('legend').classList.remove('hide');sub();$('ov').classList.add('hide')}
-function start(){
+function start(){$('victory').classList.add('hide');
   ents=[];parts=[];score=0;gT=0;mT=0;pt=0;cont=false;runBanked=0;
   runMult=armed?1.5:1;armed=false;state='play';$('hud').textContent=0;play();
   for(let i=0;i<3;i++)spawn('g');
@@ -265,7 +265,7 @@ function end(){
   state='over';games++;hold=false;beep(110);shake=18;burst(px,py,THEMES[theme].b);
   const before=lvl(bank),e=Math.floor(score),m=[];bank+=e-runBanked;runBanked=e;
   if(e>best){best=e;m.push('🏆 ¡NUEVO RÉCORD!')}
-  const after=lvl(bank);if(after>before){theme=after;m.push('🎉 ¡NIVEL '+(after+1)+' desbloqueado: '+THEMES[after].n+'!')}
+  const after=lvl(bank);if(after>before){theme=after;m.push('🎉 ¡NIVEL '+(after+1)+' desbloqueado: '+THEMES[after].n+'!')}const finishedFinal=after>=THEMES.length-1&&before<THEMES.length-1;if(finishedFinal)showVictory();
   save();
   $('t').textContent=e+' pts';
   $('s').innerHTML=(m.join('<br>')||'Ganados en esta partida')+(runMult>1?' (x1.5)':'');
@@ -274,7 +274,7 @@ function end(){
   $('hud').classList.add('hide');$('sub').classList.add('hide');$('legend').classList.add('hide');
   refresh();$('ov').classList.remove('hide');
 }
-$('game').addEventListener('pointerdown',e=>{if(e.target.tagName!=='BUTTON'&&state==='play'){hold=true;e.preventDefault()}});
+function showVictory(){const box=$('victory');box.classList.remove('hide');$('ov').classList.add('hide');for(let i=0;i<34;i++){const q=document.createElement('i');q.className='confetti';q.style.left=Math.random()*100+'%';q.style.setProperty('--dx',((Math.random()-.5)*180)+'px');q.style.animationDelay=Math.random()*2.5+'s';q.style.background=['#fde047','#22d3ee','#f43f5e','#4ade80','#c084fc'][i%5];box.appendChild(q)}beep(880);setTimeout(()=>beep(1175),180);setTimeout(()=>beep(1568),360)}$('victoryHome').onclick=()=>{$('victory').classList.add('hide');$('home').click()};$('game').addEventListener('pointerdown',e=>{if(e.target.tagName!=='BUTTON'&&state==='play'){hold=true;e.preventDefault()}});
 addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()=>hold=false);
 addEventListener('keydown',e=>{if(e.code==='Space')hold=true});addEventListener('keyup',e=>{if(e.code==='Space')hold=false});
 $('play').onclick=()=>{if(state==='over'&&games%3===0)showInterstitial(start);else start()};
