@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://magnetrush.vercel.app/sitemap.xml
+Sitemap: https://magnetixgame.vercel.app/sitemap.xml
