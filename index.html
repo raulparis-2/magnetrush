@@ -137,6 +137,7 @@ button:disabled{opacity:.6}
       <div id="lv"><b id="lvn"></b><div id="lb"><i id="lf"></i></div><small id="lt"></small></div>
       <div id="th"><button id="pv" class="mini">◀</button><span id="tn"></span><button id="nx" class="mini">▶</button></div><div id="guide" style="margin-top:8px;font-size:13px;opacity:.9"><span style="color:#fde047">● Coger: <b id="goodEmoji"></b></span> &nbsp; <span style="color:#ff6b81">● Evitar: <b id="badEmoji"></b></span></div>
       <button id="play">Jugar</button>
+      <button id="home" class="mini">⌂ Volver al inicio</button>
       <button id="x15" class="sec">Ganancias x1.5 (ver anuncio)</button>
       <button id="cont" class="sec hide">Continuar (ver anuncio)</button>
     </div>
@@ -187,8 +188,7 @@ let bank=0,best=0,theme=0,armed=false,runMult=1,runBanked=0;
 const save=()=>{try{localStorage.setItem('bank',bank);localStorage.setItem('theme',theme);localStorage.setItem('best',best)}catch(e){}};
 try{bank=+localStorage.getItem('bank')||0;theme=+localStorage.getItem('theme')||0;best=+localStorage.getItem('best')||0}catch(e){}
 // Los niveles se desbloquean según los puntos acumulados.
-const PREVIEW_ALL_LEVELS=true;
-const lvl=b=>PREVIEW_ALL_LEVELS?THEMES.length-1:TH.reduce((l,v,i)=>b>=v?i:l,0);
+const lvl=b=>TH.reduce((l,v,i)=>b>=v?i:l,0);
 function beep(f){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.stop(ac.currentTime+.12)}catch(e){}}
 
 
@@ -236,9 +236,10 @@ function refresh(){
   const T=THEMES[theme];
   document.documentElement.style.setProperty('--a',T.a);document.documentElement.style.setProperty('--b',T.b);
   $('rv').textContent=best;
-  $('lvn').textContent='Todos los niveles · '+bank+' pts';
-  $('lf').style.width='100%';
-  $('lt').textContent='¡Todos los niveles desbloqueados!';
+  $('lvn').textContent='Nivel '+(l+1)+' · '+bank+' pts';
+  const next=TH[l+1];
+  $('lf').style.width=(l>=THEMES.length-1?'100%':Math.min(100,((bank-TH[l])/Math.max(1,(next-TH[l])))*100))+'%';
+  $('lt').textContent=l>=THEMES.length-1?'¡Todos los niveles desbloqueados!':'Siguiente nivel: '+THEMES[l+1].n+' · '+TH[l+1]+' pts';
   $('tn').textContent=T.g+' '+T.n+' '+T.m;
   $('goodEmoji').textContent=T.g; $('badEmoji').textContent=T.m;
   $('pv').disabled=theme<=0;
@@ -280,7 +281,8 @@ $('play').onclick=()=>{if(state==='over'&&games%3===0)showInterstitial(start);el
 $('x15').onclick=()=>showRewarded(()=>{armed=true;refresh()});
 $('cont').onclick=()=>showRewarded(()=>{cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()});
 $('pv').onclick=()=>{if(theme>0){theme--;save();refresh()}};
-$('nx').onclick=()=>{if(theme<THEMES.length-1){theme++;save();refresh()}};
+$('nx').onclick=()=>{if(theme<lvl(bank)){theme++;save();refresh()}};
+$('home').onclick=()=>{state='menu';hold=false;ents=[];parts=[];armed=false;runMult=1;$('hud').classList.add('hide');$('sub').classList.add('hide');$('legend').classList.add('hide');$('t').textContent='MAGNET RUSH';$('s').innerHTML='<span style="color:#fde047">● Coge los objetos dorados</span>.<br><span style="color:#ff6b81">✕ Evita las minas rojas</span>.<br>Mantén pulsado para <b>ATRAER</b> y suelta para <b>REPELER</b>.';$('play').textContent='Jugar';$('cont').classList.add('hide');refresh();$('ov').classList.remove('hide')};
 loadProgress();
 refresh();
 
