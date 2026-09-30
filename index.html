@@ -192,7 +192,7 @@ function beep(f){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)
 
 
 function updateLockedLevels(){
-  const unlocked=lvl(bank);
+  const unlocked=THEMES.length-1;
   document.querySelectorAll('[data-level]').forEach(el=>{
     const n=Number(el.dataset.level);
     const locked=n>unlocked;
@@ -225,7 +225,7 @@ function loadProgress(){
     const p=JSON.parse(raw);
     if(p && Number.isFinite(Number(p.bank))) bank=Math.max(0,Number(p.bank));
     if(p && Number.isFinite(Number(p.best))) best=Math.max(0,Number(p.best));
-    const unlocked=lvl(bank);
+    const unlocked=THEMES.length-1;
     if(p && Number.isFinite(Number(p.theme))) theme=Math.max(0,Math.min(unlocked,Number(p.theme)));
   }catch(e){}
 }
@@ -238,25 +238,7 @@ function refresh(){
   $('rv').textContent=best;
   $('lvn').textContent='Nivel '+(l+1)+' · '+bank+' pts';
   const next=TH[l+1], prev=TH[l];
-  if(next!==undefined){
-    const pct=Math.max(0,Math.min(100,((bank-prev)/(next-prev))*100));
-    $('lf').style.width=pct+'%';
-    $('lt').textContent=(next-bank)+' pts para desbloquear el nivel '+(l+2);
-  }else{
-    $('lf').style.width='100%';
-    $('lt').textContent='¡Todos los niveles desbloqueados!';
-  }
-  $('tn').textContent=T.g+' '+T.n+' '+T.m;
-  $('goodEmoji').textContent=T.g; $('badEmoji').textContent=T.m;
-  $('pv').disabled=theme<=0;
-  $('nx').disabled=theme>=l;
-  $('x15').disabled=armed;$('x15').textContent=armed?'Ganancias x1.5 activadas ✓':'Ganancias x1.5 (ver anuncio)';
-  updateLockedLevels();
-}
-function sub(){$('sub').innerHTML='<span style="color:#fde68a">🏆 '+best+'</span>'+(runMult>1?' &nbsp;<span style="color:#fbbf24">x1.5</span>':'')}
-function spawn(type){
-  const s=Math.floor(Math.random()*4),m=20,dif=score*.04+pt/1800;let x,y;
-  if(s===0){x=Math.random()*W;y=-m}else if(s===1){x=W+m;y=Math.random()*H}else if(s===2){x=Math.random()*W;y=H+m}else{x=-m;y=Math.random()*H}
+  if(next!==undefined){x=-m;y=Math.random()*H}
   const a=Math.atan2(py-y,px-x)+(Math.random()-.5)*1.2,sp=(type==='m'?.7+Math.min(dif*.04,1.2):.5)*(.7+Math.random()*.6);
   ents.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,type,r:type==='m'?13:10,rot:Math.random()*6});
 }
@@ -287,7 +269,7 @@ $('play').onclick=()=>{if(state==='over'&&games%3===0)showInterstitial(start);el
 $('x15').onclick=()=>showRewarded(()=>{armed=true;refresh()});
 $('cont').onclick=()=>showRewarded(()=>{cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()});
 $('pv').onclick=()=>{if(theme>0){theme--;save();refresh()}};
-$('nx').onclick=()=>{if(theme<lvl(bank)){theme++;save();refresh()}};
+$('nx').onclick=()=>{if(theme<THEMES.length-1){theme++;save();refresh()}};
 loadProgress();
 refresh();
 
