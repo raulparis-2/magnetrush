@@ -139,7 +139,7 @@ button:disabled{opacity:.6}
       <div id="th"><button id="pv" class="mini">◀</button><span id="tn"></span><button id="nx" class="mini">▶</button></div><div id="guide" style="margin-top:8px;font-size:13px;opacity:.9"><span style="color:#fde047">● Coger: <b id="goodEmoji"></b></span> &nbsp; <span style="color:#ff6b81">● Evitar: <b id="badEmoji"></b></span></div>
       <button id="play">Jugar</button>
       <button id="home" class="mini">⌂ Volver al inicio</button>
-      <button id="x15" class="sec">Ganancias x1.5 (ver anuncio)</button>
+      <button id="adLink" class="sec">🔗 Descubrir ofertas</button>
       <button id="cont" class="sec hide">Continuar (ver anuncio)</button>
     </div>
   </div>
@@ -167,7 +167,8 @@ button:disabled{opacity:.6}
 </div>
 <script>
 // ===== ANUNCIOS: sustituye estas dos funciones por tu SDK =====
-function showRewarded(ok){ /* SDK de anuncio recompensado; llama a ok() al terminar */ ok(); }
+function showRewarded(ok){ window.open('https://www.profitableratecpmnetwork.com/evvinbyic8?key=67078a256390db0b52f1266d59e005e8','_blank','noopener'); }
+$('adLink').onclick=()=>window.open('https://www.profitableratecpmnetwork.com/evvinbyic8?key=67078a256390db0b52f1266d59e005e8','_blank','noopener');
 function showInterstitial(next){ /* SDK de anuncio intermedio; llama a next() al cerrar */ next(); }
 // ==============================================================
 
@@ -254,7 +255,7 @@ function refresh(){
   $('goodEmoji').textContent=T.g; $('badEmoji').textContent=T.m;
   $('pv').disabled=theme<=0;
   $('nx').disabled=theme>=THEMES.length-1;
-  $('x15').disabled=armed;$('x15').textContent=armed?'Ganancias x1.5 activadas ✓':'Ganancias x1.5 (ver anuncio)';
+  $('adLink').disabled=armed;
   updateLockedLevels();
 }
 function sub(){$('sub').innerHTML='<span style="color:#fde68a">🏆 '+best+'</span>'+(runMult>1?' &nbsp;<span style="color:#fbbf24">x1.5</span>':'')}
