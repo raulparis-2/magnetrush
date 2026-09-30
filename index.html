@@ -187,7 +187,8 @@ let bank=0,best=0,theme=0,armed=false,runMult=1,runBanked=0;
 const save=()=>{try{localStorage.setItem('bank',bank);localStorage.setItem('theme',theme);localStorage.setItem('best',best)}catch(e){}};
 try{bank=+localStorage.getItem('bank')||0;theme=+localStorage.getItem('theme')||0;best=+localStorage.getItem('best')||0}catch(e){}
 // Los niveles se desbloquean según los puntos acumulados.
-const lvl=b=>{let l=0;TH.forEach((v,i)=>{if(b>=v)l=i});return l;};
+const PREVIEW_ALL_LEVELS=true;
+const lvl=b=>PREVIEW_ALL_LEVELS?THEMES.length-1:TH.reduce((l,v,i)=>b>=v?i:l,0);
 function beep(f){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.value=.07;o.connect(g);g.connect(ac.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.12);o.stop(ac.currentTime+.12)}catch(e){}}
 
 
@@ -231,7 +232,7 @@ function loadProgress(){
 
 function refresh(){
   const l=lvl(bank);
-  if(theme>l) theme=l;
+  if(theme>THEMES.length-1) theme=THEMES.length-1;
   const T=THEMES[theme];
   document.documentElement.style.setProperty('--a',T.a);document.documentElement.style.setProperty('--b',T.b);
   $('rv').textContent=best;
@@ -279,7 +280,7 @@ $('play').onclick=()=>{if(state==='over'&&games%3===0)showInterstitial(start);el
 $('x15').onclick=()=>showRewarded(()=>{armed=true;refresh()});
 $('cont').onclick=()=>showRewarded(()=>{cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()});
 $('pv').onclick=()=>{if(theme>0){theme--;save();refresh()}};
-$('nx').onclick=()=>{if(theme<lvl(bank)){theme++;save();refresh()}};
+$('nx').onclick=()=>{if(theme<THEMES.length-1){theme++;save();refresh()}};
 loadProgress();
 refresh();
 
