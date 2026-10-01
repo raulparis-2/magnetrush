@@ -289,7 +289,7 @@ addEventListener('pointerup',()=>hold=false);addEventListener('pointercancel',()
 addEventListener('keydown',e=>{if(e.code==='Space')hold=true});addEventListener('keyup',e=>{if(e.code==='Space')hold=false});
 $('play').onclick=()=>{if(state==='over'&&games%3===0)showInterstitial(start);else start()};
 $('x15').onclick=()=>{const u='https://www.'+'profitableratecpmnetwork.com/evvinbyic8?key='+'67078a256390db0b52f1266d59e005e8';window.open(u,'_blank','noopener');armed=true;refresh()};
-$('cont').onclick=()=>showRewarded(()=>{cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()});
+$('cont').onclick=()=>{const u='https://www.'+'profitableratecpmnetwork.com/evvinbyic8?key='+'67078a256390db0b52f1266d59e005e8';window.open(u,'_blank','noopener');cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()};
 $('pv').onclick=()=>{if(theme>0){theme--;save();refresh()}};
 $('nx').onclick=()=>{if(theme<lvl(bank)){theme++;save();refresh()}};
 $('home').onclick=()=>{state='menu';hold=false;ents=[];parts=[];armed=false;runMult=1;$('hud').classList.add('hide');$('sub').classList.add('hide');$('legend').classList.add('hide');$('t').textContent='MAGNETIX';$('s').innerHTML='<span style="color:#fde047">● Coge los objetos dorados</span>.<br><span style="color:#ff6b81">✕ Evita las minas rojas</span>.<br>Mantén pulsado para <b>ATRAER</b> y suelta para <b>REPELER</b>.';$('play').textContent='Jugar';$('cont').classList.add('hide');refresh();$('ov').classList.remove('hide')};
