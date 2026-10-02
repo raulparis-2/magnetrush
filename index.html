@@ -271,13 +271,14 @@ function spawn(type){
   ents.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,type,r:type==='m'?13:10,rot:Math.random()*6});
 }
 function burst(x,y,col){for(let i=0;i<7;i++){const a=Math.random()*6.28,s=1+Math.random()*2.8;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c:col})}}
-function play(){$('hud').classList.remove('hide');$('sub').classList.remove('hide');$('legend').classList.remove('hide');sub();$('ov').classList.add('hide')}
+function play(){$('ad').style.display='none';$('hud').classList.remove('hide');$('sub').classList.remove('hide');$('legend').classList.remove('hide');sub();$('ov').classList.add('hide')}
 function start(){$('victory').classList.add('hide');
   ents=[];parts=[];score=0;gT=0;mT=0;pt=0;cont=false;runBanked=0;
   runMult=armed?1.5:1;armed=false;state='play';$('hud').textContent=0;play();
   for(let i=0;i<3;i++)spawn('g');
 }
 function end(){
+  $('ad').style.display='flex';
   state='over';games++;hold=false;beep(110);shake=18;burst(px,py,THEMES[theme].b);
   const before=lvl(bank),e=Math.floor(score),m=[];bank+=e-runBanked;runBanked=e;
   if(e>best){best=e;m.push('🏆 ¡NUEVO RÉCORD!')}
@@ -298,7 +299,7 @@ $('x15').onclick=()=>{const u='https://www.'+'profitableratecpmnetwork.com/evvin
 $('cont').onclick=()=>{const u='https://www.'+'profitableratecpmnetwork.com/evvinbyic8?key='+'67078a256390db0b52f1266d59e005e8';window.open(u,'_blank','noopener');cont=true;ents=ents.filter(e=>e.type!=='m'||Math.hypot(e.x-px,e.y-py)>170);state='play';play()};
 $('pv').onclick=()=>{if(theme>0){theme--;save();refresh()}};
 $('nx').onclick=()=>{if(theme<lvl(bank)){theme++;save();refresh()}};
-$('home').onclick=()=>{state='menu';hold=false;ents=[];parts=[];armed=false;runMult=1;$('hud').classList.add('hide');$('sub').classList.add('hide');$('legend').classList.add('hide');$('t').textContent='MAGNETIX';$('s').innerHTML='<span style="color:#fde047">● Coge los objetos dorados</span>.<br><span style="color:#ff6b81">✕ Evita las minas rojas</span>.<br>Mantén pulsado para <b>ATRAER</b> y suelta para <b>REPELER</b>.';$('play').textContent='Jugar';$('cont').classList.add('hide');refresh();$('ov').classList.remove('hide')};
+$('home').onclick=()=>{$('ad').style.display='flex';state='menu';hold=false;ents=[];parts=[];armed=false;runMult=1;$('hud').classList.add('hide');$('sub').classList.add('hide');$('legend').classList.add('hide');$('t').textContent='MAGNETIX';$('s').innerHTML='<span style="color:#fde047">● Coge los objetos dorados</span>.<br><span style="color:#ff6b81">✕ Evita las minas rojas</span>.<br>Mantén pulsado para <b>ATRAER</b> y suelta para <b>REPELER</b>.';$('play').textContent='Jugar';$('cont').classList.add('hide');refresh();$('ov').classList.remove('hide')};
 loadProgress();
 refresh();
 
@@ -384,6 +385,6 @@ requestAnimationFrame(loop);
 window.addEventListener('pagehide',saveProgress);
 window.addEventListener('beforeunload',saveProgress);
 </script>
-  <script src="https://pl31593345.profitableratecpmnetwork.com/b9/35/30/b93530c26dc85078334671644d22d049.js"></script>
+
 </body>
 </html>
