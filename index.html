@@ -271,7 +271,7 @@ function spawn(type){
   ents.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,type,r:type==='m'?13:10,rot:Math.random()*6});
 }
 function burst(x,y,col){for(let i=0;i<7;i++){const a=Math.random()*6.28,s=1+Math.random()*2.8;parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1,c:col})}}
-function play(){$('ad').style.display='none';$('hud').classList.remove('hide');$('sub').classList.remove('hide');$('legend').classList.remove('hide');sub();$('ov').classList.add('hide')}
+function play(){$('ad').style.display='flex';$('hud').classList.remove('hide');$('sub').classList.remove('hide');$('legend').classList.remove('hide');sub();$('ov').classList.add('hide')}
 function start(){$('victory').classList.add('hide');
   ents=[];parts=[];score=0;gT=0;mT=0;pt=0;cont=false;runBanked=0;
   runMult=armed?1.5:1;armed=false;state='play';$('hud').textContent=0;play();
